@@ -1,0 +1,46 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% if message %}
+    <div>{{ message }}</div>
+{% endif %}
+
+
+<h4>Followers Posts</h4>  
+
+        <form action="{% url 'profile' %}" method="GET">
+        {% for item in page_obj %}
+        <h5 style="border-style: solid;margin: 15px;border-width: thin;">
+            <div>
+                <input type="submit" name="user" value="{{ item.user }}" style="background:none; border-width:0px; color:black; text-decoration:underline;" />
+            </div>
+            <div>{{ item.content }}</div>
+            <div>{{ item.timestamp }}</div>
+            <div>{{ item.likes }}</div>
+        </h5>
+        <br>  
+        {% endfor %}
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        </form>
+        </div>
+
+
+{% endblock %}

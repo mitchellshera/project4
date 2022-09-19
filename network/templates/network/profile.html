@@ -1,0 +1,41 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% if message %}
+    <div>{{ message }}</div>
+{% endif %}
+
+<form  method="POST">
+{% csrf_token %}
+<div id="profile">
+    <h3>{{ username }}</h3>
+    {% if current_following == False and own_profile == False %}
+    <input type="submit" id='follow_user' name='follow_user' value="Follow {{ username }}"></button>
+    {% elif own_profile == False %}
+    <input type="submit" id='unfollow_user' name='unfollow_user' value="Unfollow {{ username }}"></button>
+    {% endif %}
+
+</div>
+</form>
+<h4>Followers:{{ total_followers }}</h4>  
+<h4>Following:{{ total_following }}</h4>
+<br>
+<h3>My Posts</h3>
+{% for item in all_posts_user %}
+        <h5 style="border-style: solid;margin: 15px;border-width: thin;">
+            <div>
+                <input type="submit" name="user" value="{{ item.user }}" style="background:none; border-width:0px; color:black; text-decoration:underline;" />
+            </div>
+            <div id="post_{{ item.id }}">{{ item.content }}</div>
+            <div>{{ item.timestamp }}</div>
+            <div>Likes:{{ item.likes }}</div>
+            {% if item.user == request.user %}
+            <button type="button" onclick='document.getElementById("post_{{ item.id }}").innerHTML = "<textarea>{{ item.content }}</textarea>"'>Edit</button>
+            {% endif %}
+        </h5>
+        <br>  
+        {% endfor %}
+
+
+{% endblock %}
